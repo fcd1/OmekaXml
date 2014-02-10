@@ -337,8 +337,8 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
         foreach ($elementSets as $elementSetId => $elementSet) {
              // elementSet
 	  // fcd1, 02/10/14:
-	  // 
-	  /* Instead of creating elementSet, create element using the name of the set
+	  // Instead of creating elementSet, create XML element using the name of the set
+	  /* 
             $elementSetElement = $this->_createElement('elementSet', null, $elementSetId);
             $nameElement = $this->_createElement('name', $elementSet['name'], null, $elementSetElement);
 	    $descriptionElement = $this->_createElement('description', $elementSet['description'], null, $elementSetElement);
@@ -357,9 +357,19 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
                     continue;
                 }
                 // element
+	  // fcd1, 02/10/14:
+	  // Instead of creating element, create element using the name of the set
+	  /* 
                 $elementElement = $this->_createElement('element', null, $elementId);
                 $nameElement = $this->_createElement('name', $element['name'], null, $elementElement);
                 $descriptionElement = $this->_createElement('description', $element['description'], null, $elementElement);
+	  */
+	    // fcd1, 02/10/14:
+	    // remove space and '/' from name, and create an element using the resulting string
+	    $elementNameNoSpaces = str_replace(" ","",$element['name']);
+	    $elementNameNoSpaces = str_replace("/","",$elementNameNoSpaces);
+            $elementElement = $this->_createElement($elementNameNoSpaces);
+
                 // elementTextContainer
                 $elementTextContainerElement = $this->_createElement('elementTextContainer');
                 foreach ($element['elementTexts'] as $elementTextId => $elementText) {
