@@ -172,6 +172,11 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
      * @param bool $getItemType Whether to get the item type metadata.
      * @return stdClass A list of element sets or an item type.
      */
+    // fcd1, 02/10/14:
+    // Commented out original function _getElemetSetsByElementTexts(), and
+    // make changes on a copy.
+    // Original function is below
+    /*
     protected function _getElemetSetsByElementTexts(Omeka_Record_AbstractRecord $record, $getItemType = false)
     {
         $elementSets = array();
@@ -212,6 +217,50 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
         // Return the element sets metadata.
         return $elementSets;
     }
+    */
+    // fcd1, 02/10/14:
+    // This is the copy of the function where the changes will be made
+    protected function _getElemetSetsByElementTexts(Omeka_Record_AbstractRecord $record, $getItemType = false)
+    {
+        $elementSets = array();
+        $itemType = array();
+        
+        // Get all element texts associated with the provided record.
+        $elementTexts = $record->getAllElementTexts();
+
+        foreach ($elementTexts as $elementText) {
+            
+            // Get associated element and element set records.
+            $element = get_db()->getTable('Element')->find($elementText->element_id);
+            $elementSet = get_db()->getTable('ElementSet')->find($element->element_set_id);
+            
+            // Differenciate between the element sets and the "Item Type 
+            // Metadata" pseudo element set.
+            if (ElementSet::ITEM_TYPE_NAME == $elementSet->name) {
+                $itemType['elements'][$element->id]['name'] = $element->name;
+                $itemType['elements'][$element->id]['description'] = $element->description;
+                $itemType['elements'][$element->id]['elementTexts'][$elementText->id]['text'] = $elementText->text;
+            } else {
+                $elementSets[$elementSet->id]['name'] = $elementSet->name;
+                $elementSets[$elementSet->id]['description'] = $elementSet->description;
+                $elementSets[$elementSet->id]['elements'][$element->id]['name'] = $element->name;
+                $elementSets[$elementSet->id]['elements'][$element->id]['description'] = $element->description;
+                $elementSets[$elementSet->id]['elements'][$element->id]['elementTexts'][$elementText->id]['text'] = $elementText->text;
+            }
+        }
+        
+        // Return the item type metadata.
+        if ($getItemType) {
+            $itemType['id'] = $record->Type->id;
+            $itemType['name'] = $record->Type->name;
+            $itemType['description'] = $record->Type->description;
+            return $itemType;
+        }
+        
+        // Return the element sets metadata.
+        return $elementSets;
+    }
+
     
     /**
      * Build an elementSetContainer element in a record (item or file) context.
