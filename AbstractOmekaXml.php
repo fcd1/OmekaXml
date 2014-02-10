@@ -352,8 +352,12 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
      * element.
      * @return void|null
      */
+    // fcd1, 02/10/14:
+    // We don't want the file information, so remove just return null.
+    // existing code will be commented out
     protected function _buildCollectionForItem(Item $item, DOMElement $parentElement)
     {
+      /*
         // Return if the item has no collection.
         if (!$item->Collection) {
             return null;
@@ -362,6 +366,8 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
         $collectionElement = $this->_createElement('collection', null, $item->Collection->id);
         $this->_buildElementSetContainerForRecord($item->Collection, $collectionElement);
         $parentElement->appendChild($collectionElement);
+      */
+      return null;
     }
     
     /**
