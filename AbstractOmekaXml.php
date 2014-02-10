@@ -380,13 +380,18 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
 		// Get rid of elementTextContainer.
                 // $elementTextContainerElement = $this->_createElement('elementTextContainer');
                 foreach ($element['elementTexts'] as $elementTextId => $elementText) {
-                    // elementText
-                    $elementTextElement = $this->_createElement('elementText', null, $elementTextId);
-                    $textElement = $this->_createElement('text', $elementText['text'], null, $elementTextElement);
+		  // elementText
+		  // fcd1, 02/10/14:
+		  // Get rid of elementText.
+		  // $elementTextElement = $this->_createElement('elementText', null, $elementTextId);
+                    $textElement = $this->_createElement('text', $elementText['text'], null, $elementElement);
 		    // fcd1, 02/10/14:
 		    // Get rid of elementContainer, so append directly to the element
                     // $elementTextContainerElement->appendChild($elementTextElement);
-		    $elementElement->appendChild($elementTextElement);
+		    // fcd1, 02/10/14:
+		    // Get rid of elementText. Element text is appended directly to
+		    // $elementElement at time of creation
+		    // $elementElement->appendChild($elementTextElement);
                 }
 		// fcd1, 02/10/14:
 		// Get rid of elementContainer.
