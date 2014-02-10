@@ -362,28 +362,35 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
                     continue;
                 }
                 // element
-	  // fcd1, 02/10/14:
-	  // Instead of creating element, create element using the name of the set
-	  /* 
-                $elementElement = $this->_createElement('element', null, $elementId);
-                $nameElement = $this->_createElement('name', $element['name'], null, $elementElement);
-                $descriptionElement = $this->_createElement('description', $element['description'], null, $elementElement);
-	  */
-	    // fcd1, 02/10/14:
-	    // remove space and '/' from name, and create an element using the resulting string
-	    $elementNameNoSpaces = str_replace(" ","",$element['name']);
-	    $elementNameNoSpaces = str_replace("/","",$elementNameNoSpaces);
-            $elementElement = $this->_createElement($elementNameNoSpaces);
-
-                // elementTextContainer
-                $elementTextContainerElement = $this->_createElement('elementTextContainer');
+		// fcd1, 02/10/14:
+		// Instead of creating element, create element using the name of the set
+		/* 
+		 $elementElement = $this->_createElement('element', null, $elementId);
+		 $nameElement = $this->_createElement('name', $element['name'], null, $elementElement);
+		 $descriptionElement = $this->_createElement('description', $element['description'], null, $elementElement);
+		*/
+		// fcd1, 02/10/14:
+		// remove space and '/' from name, and create an element using the resulting string
+		$elementNameNoSpaces = str_replace(" ","",$element['name']);
+		$elementNameNoSpaces = str_replace("/","",$elementNameNoSpaces);
+		$elementElement = $this->_createElement($elementNameNoSpaces);
+		
+		// elementTextContainer
+		// fcd1, 02/10/14:
+		// Get rid of elementTextContainer.
+                // $elementTextContainerElement = $this->_createElement('elementTextContainer');
                 foreach ($element['elementTexts'] as $elementTextId => $elementText) {
                     // elementText
                     $elementTextElement = $this->_createElement('elementText', null, $elementTextId);
                     $textElement = $this->_createElement('text', $elementText['text'], null, $elementTextElement);
-                    $elementTextContainerElement->appendChild($elementTextElement);
+		    // fcd1, 02/10/14:
+		    // Get rid of elementContainer, so append directly to the element
+                    // $elementTextContainerElement->appendChild($elementTextElement);
+		    $elementElement->appendChild($elementTextElement);
                 }
-                $elementElement->appendChild($elementTextContainerElement);
+		// fcd1, 02/10/14:
+		// Get rid of elementContainer.
+                // $elementElement->appendChild($elementTextContainerElement);
 		// fcd1, 02/10/14:
 		// Get rid of elementContainer.
                 // $elementContainerElement->appendChild($elementElement)
