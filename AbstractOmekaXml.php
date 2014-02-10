@@ -89,13 +89,17 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
      * @param DOMElement $rootElement
      * @return DOMElement The root element, including required attributes.
      */
+    // fcd1, 02/10/14:
+    // Remove all the attributes of the root element
     protected function _setRootElement($rootElement)
     {
+      /*
         $rootElement->setAttribute('xmlns', self::XMLNS);
         $rootElement->setAttribute('xmlns:xsi', self::XMLNS_XSI);
         $rootElement->setAttribute('xsi:schemaLocation', self::XMLNS . ' ' . self::XMLNS_SCHEMALOCATION);
         $rootElement->setAttribute('uri', $this->_buildUrl());
         $rootElement->setAttribute('accessDate', date('c'));
+      */
         return $rootElement;
     }
     
