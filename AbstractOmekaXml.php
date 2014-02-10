@@ -424,6 +424,52 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
      * @param DOMElement $parentElement The item type will append to this element.
      * @return void|null
      */
+    // fcd1, 02/10/14:
+    // Commented out original function _buildItemTypeForItem(), and
+    // make changes on a copy.
+    // Original function is below
+    /*
+    protected function _buildItemTypeForItem(Item $item, DOMElement $parentElement)
+    {
+        // Return if the item does not have an item type.
+        if (!$item->Type) {
+            return null;
+        }
+        
+        $itemType = $this->_getElemetSetsByElementTexts($item, true);
+        
+        // itemType
+        $itemTypeElement = $this->_createElement('itemType', null, $itemType['id']);
+        $nameElement = $this->_createElement('name', $itemType['name'], null, $itemTypeElement);
+        $descriptionElement = $this->_createElement('description', $itemType['description'], null, $itemTypeElement);
+        
+        // Do not append elements if no element texts exist for this item type.
+        if (isset($itemType['elements'])) {
+            // elementContainer
+            $elementContainerElement = $this->_createElement('elementContainer');
+            foreach ($itemType['elements'] as $elementId => $element) {
+                // element
+                $elementElement = $this->_createElement('element', null, $elementId);
+                $nameElement = $this->_createElement('name', $element['name'], null, $elementElement);
+                $descriptionElement = $this->_createElement('description', $element['description'], null, $elementElement);
+                // elementTextContainer
+                $elementTextContainerElement = $this->_createElement('elementTextContainer');
+                foreach ($element['elementTexts'] as $elementTextId => $elementText) {
+                    // elementText
+                    $elementTextElement = $this->_createElement('elementText', null, $elementTextId);
+                    $textElement = $this->_createElement('text', $elementText['text'], null, $elementTextElement);
+                    $elementTextContainerElement->appendChild($elementTextElement);
+                }
+                $elementElement->appendChild($elementTextContainerElement);
+                $elementContainerElement->appendChild($elementElement);
+            }
+            $itemTypeElement->appendChild($elementContainerElement);
+        }
+        $parentElement->appendChild($itemTypeElement);
+    }
+    */
+    // fcd1, 02/10/14:
+    // This is the copy of the function where the changes will be made
     protected function _buildItemTypeForItem(Item $item, DOMElement $parentElement)
     {
         // Return if the item does not have an item type.
