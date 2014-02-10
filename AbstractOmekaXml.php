@@ -333,7 +333,10 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
         }
         
         // elementSetContainer
-        $elementSetContainerElement = $this->_createElement('elementSetContainer');
+	// fcd1, 02/10/14:
+	// Get rid of elementSetContainer. So its direct children, the elementset,
+	// will now be direct children of $parentElement
+        // $elementSetContainerElement = $this->_createElement('elementSetContainer');
         foreach ($elementSets as $elementSetId => $elementSet) {
              // elementSet
 	  // fcd1, 02/10/14:
@@ -382,9 +385,16 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
                 $elementContainerElement->appendChild($elementElement);
             }
             $elementSetElement->appendChild($elementContainerElement);
-            $elementSetContainerElement->appendChild($elementSetElement);
+	    // fcd1, 02/10/14:
+	    // Get rid of elementSetContainer. So its direct children, the elementset,
+	    // will now be direct children of $parentElement
+            // $elementSetContainerElement->appendChild($elementSetElement);
+	    $parentElement->appendChild($elementSetElement);
         }
-        $parentElement->appendChild($elementSetContainerElement);
+	// fcd1, 02/10/14:
+	// Get rid of elementSetContainer. So its direct children, the elementset,
+	// will now be direct children of $parentElement
+        // $parentElement->appendChild($elementSetContainerElement);
     }
 
     /**
