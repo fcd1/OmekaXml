@@ -352,7 +352,9 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
             $elementSetElement = $this->_createElement($elementSetNameNoSpaces);
 
             // elementContainer
-            $elementContainerElement = $this->_createElement('elementContainer');
+	    // fcd1, 02/10/14:
+	    // Get rid of elementContainer.
+            // $elementContainerElement = $this->_createElement('elementContainer');
             foreach ($elementSet['elements'] as $elementId => $element) {
                 // Exif data may contain invalid XML characters. Avoid encoding 
                 // errors by skipping relevent elements.
@@ -382,9 +384,15 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
                     $elementTextContainerElement->appendChild($elementTextElement);
                 }
                 $elementElement->appendChild($elementTextContainerElement);
-                $elementContainerElement->appendChild($elementElement);
+		// fcd1, 02/10/14:
+		// Get rid of elementContainer.
+                // $elementContainerElement->appendChild($elementElement)
+		// Each element will now be a directy child of the element set
+		$elementSetElement->appendChild($elementElement);;
             }
-            $elementSetElement->appendChild($elementContainerElement);
+	    // fcd1, 02/10/14:
+	    // Get rid of elementContainer.
+            // $elementSetElement->appendChild($elementContainerElement);
 	    // fcd1, 02/10/14:
 	    // Get rid of elementSetContainer. So its direct children, the elementset,
 	    // will now be direct children of $parentElement
