@@ -313,8 +313,12 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
      * element.
      * @return void|null
      */
+    // fcd1, 02/10/14:
+    // We don't want the file information, so remove just return null.
+    // existing code will be commented out
     protected function _buildFileContainerForItem(Item $item, DOMElement $parentElement)
     {
+      /*
         // Return if the item has no files.
         if (!count($item->Files)) {
             return null;
@@ -328,6 +332,8 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
             $fileContainerElement->appendChild($fileElement);
         }
         $parentElement->appendChild($fileContainerElement);
+      */
+      return null;
     }
     
     /**
