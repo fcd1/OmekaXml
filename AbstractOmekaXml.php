@@ -271,6 +271,11 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
      * this element.
      * @return void|null
      */
+    // fcd1, 02/10/14:
+    // Commented out original function _buildElementSetContainerForRecord(), and
+    // make changes on a copy.
+    // Original function is below
+    /*
     protected function _buildElementSetContainerForRecord(Omeka_Record_AbstractRecord $record, DOMElement $parentElement)
     {
         $elementSets = $this->_getElemetSetsByElementTexts($record);
@@ -315,7 +320,54 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
         }
         $parentElement->appendChild($elementSetContainerElement);
     }
-    
+    */
+    // fcd1, 02/10/14:
+    // This is the copy of the function where the changes will be made
+    protected function _buildElementSetContainerForRecord(Omeka_Record_AbstractRecord $record, DOMElement $parentElement)
+    {
+        $elementSets = $this->_getElemetSetsByElementTexts($record);
+        
+        // Return if there are no element sets.
+        if (!$elementSets) {
+            return null;
+        }
+        
+        // elementSetContainer
+        $elementSetContainerElement = $this->_createElement('elementSetContainer');
+        foreach ($elementSets as $elementSetId => $elementSet) {
+             // elementSet
+            $elementSetElement = $this->_createElement('elementSet', null, $elementSetId);
+            $nameElement = $this->_createElement('name', $elementSet['name'], null, $elementSetElement);
+            $descriptionElement = $this->_createElement('description', $elementSet['description'], null, $elementSetElement);
+            // elementContainer
+            $elementContainerElement = $this->_createElement('elementContainer');
+            foreach ($elementSet['elements'] as $elementId => $element) {
+                // Exif data may contain invalid XML characters. Avoid encoding 
+                // errors by skipping relevent elements.
+                if ('Omeka Image File' == $elementSet['name'] && ('Exif Array' == $element['name'] || 'Exif String' == $element['name'])) {
+                    continue;
+                }
+                // element
+                $elementElement = $this->_createElement('element', null, $elementId);
+                $nameElement = $this->_createElement('name', $element['name'], null, $elementElement);
+                $descriptionElement = $this->_createElement('description', $element['description'], null, $elementElement);
+                // elementTextContainer
+                $elementTextContainerElement = $this->_createElement('elementTextContainer');
+                foreach ($element['elementTexts'] as $elementTextId => $elementText) {
+                    // elementText
+                    $elementTextElement = $this->_createElement('elementText', null, $elementTextId);
+                    $textElement = $this->_createElement('text', $elementText['text'], null, $elementTextElement);
+                    $elementTextContainerElement->appendChild($elementTextElement);
+                }
+                $elementElement->appendChild($elementTextContainerElement);
+                $elementContainerElement->appendChild($elementElement);
+            }
+            $elementSetElement->appendChild($elementContainerElement);
+            $elementSetContainerElement->appendChild($elementSetElement);
+        }
+        $parentElement->appendChild($elementSetContainerElement);
+    }
+
     /**
      * Build an itemType element in an item context.
      * 
