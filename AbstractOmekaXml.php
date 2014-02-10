@@ -336,9 +336,18 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
         $elementSetContainerElement = $this->_createElement('elementSetContainer');
         foreach ($elementSets as $elementSetId => $elementSet) {
              // elementSet
+	  // fcd1, 02/10/14:
+	  // 
+	  /* Instead of creating elementSet, create element using the name of the set
             $elementSetElement = $this->_createElement('elementSet', null, $elementSetId);
             $nameElement = $this->_createElement('name', $elementSet['name'], null, $elementSetElement);
-            $descriptionElement = $this->_createElement('description', $elementSet['description'], null, $elementSetElement);
+	    $descriptionElement = $this->_createElement('description', $elementSet['description'], null, $elementSetElement);
+	  */
+	    // fcd1, 02/10/14:
+	    // remove space from name, and create an element using the resulting string
+	    $elementSetNameNoSpaces = str_replace(" ","",$elementSet['name']);
+            $elementSetElement = $this->_createElement($elementSetNameNoSpaces);
+
             // elementContainer
             $elementContainerElement = $this->_createElement('elementContainer');
             foreach ($elementSet['elements'] as $elementId => $element) {
