@@ -609,6 +609,35 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
       return null;
     }
     
+    // fcd1, 02/12/14:
+    // Wrote the following
+    protected function _getCollectionTitle(Omeka_Record_AbstractRecord $record, $getItemType = false)
+    {
+        $elementSets = array();
+        $itemType = array();
+        
+        // Get all element texts associated with the provided record.
+        $elementTexts = $record->getAllElementTexts();
+
+        foreach ($elementTexts as $elementText) {
+            
+            // Get associated element and element set records.
+            $element = get_db()->getTable('Element')->find($elementText->element_id);
+            $elementSet = get_db()->getTable('ElementSet')->find($element->element_set_id);
+            
+	      if ( ($elementSet->name == 'Dublin Core')
+		   &&
+		   ($element->name == 'Title') )
+		{
+		  return $elementText->text;
+		}
+        }
+        
+	// fcd1, 02/12/14:
+	// If got here, nothing to return, so just return null
+        return null;
+    }
+
     /**
      * Build a collection element in an item context.
      * 
@@ -620,18 +649,21 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
     // fcd1, 02/10/14:
     // We don't want the file information, so remove just return null.
     // existing code will be commented out
+    // fcd1, 02/12/14:
+    // Actually, we want to know the Omeka Collection the item is in
     protected function _buildCollectionForItem(Item $item, DOMElement $parentElement)
     {
-      /*
+
         // Return if the item has no collection.
         if (!$item->Collection) {
             return null;
         }
-        
-        $collectionElement = $this->_createElement('collection', null, $item->Collection->id);
-        $this->_buildElementSetContainerForRecord($item->Collection, $collectionElement);
+
+	$collectionName = $this->_getCollectionTitle($item->Collection);
+        $collectionElement = $this->_createElement('OmekaCollection', $collectionName);
+        // $this->_buildElementSetContainerForRecord($item->Collection, $collectionElement);
         $parentElement->appendChild($collectionElement);
-      */
+
       return null;
     }
     
