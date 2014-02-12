@@ -470,6 +470,12 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
     */
     // fcd1, 02/10/14:
     // This is the copy of the function where the changes will be made
+    // fcd1, 02/12/14:
+    // Gonna make a copy of what I have so far (in case I want to go back),
+    // and I'm gonna use the copy to do the following: each ItemType contains the
+    // item type, as well as any other metadata provided for that item type, as
+    // content, with the metadata given a field: value
+    /*
     protected function _buildItemTypeForItem(Item $item, DOMElement $parentElement)
     {
         // Return if the item does not have an item type.
@@ -539,7 +545,39 @@ abstract class Omeka_Output_OmekaXml_AbstractOmekaXml
         }
         $parentElement->appendChild($itemTypeElement);
     }
-    
+    */
+
+    // fcd1, 02/12/14
+    protected function _buildItemTypeForItem(Item $item, DOMElement $parentElement)
+    {
+        // Return if the item does not have an item type.
+        if (!$item->Type) {
+            return null;
+        }
+        
+        $itemType = $this->_getElemetSetsByElementTexts($item, true);
+        
+        $itemTypeElement = $this->_createElement('ItemType', $itemType['name']);
+        
+        // Do not append elements if no element texts exist for this item type.
+        if (isset($itemType['elements'])) {
+            foreach ($itemType['elements'] as $elementId => $element) {
+
+                foreach ($element['elementTexts'] as $elementTextId => $elementText) {
+
+		  $textElement = $this->_createElement('text',
+						       $element['name']. ': ' . $elementText['text'], null,
+						       $itemTypeElement);
+                }
+
+            }
+
+        }
+
+        $parentElement->appendChild($itemTypeElement);
+
+    }
+
     /**
      * Build a fileContainer element in an item context.
      * 
